@@ -26,9 +26,12 @@
         "url": "https://github.com/lleohao/transform-nej-to-commonjs/issues"
     },
     "homepage": "https://github.com/lleohao/transform-nej-to-commonjs#readme",
-    "dependencies": {},
+    "dependencies": {
+        "babel-template": "^7.0.0-beta.3"
+    },
     "devDependencies": {
         "@types/node": "^8.0.49",
+        "babel-core": "^6.26.0",
         "cz-conventional-changelog": "^2.1.0",
         "typescript": "^2.6.1"
     },
