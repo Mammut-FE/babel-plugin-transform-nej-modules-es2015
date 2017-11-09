@@ -17,6 +17,17 @@ export default function ({ types: t }) {
 
                     const IMPORT_LIST = [];
 
+                    /**
+                     * 处理 nej 依赖, 转换成依赖 nejm https://github.com/lleohao/nejm
+                     * 
+                     * @example
+                     * in: 
+                     * define(['base/klass','base/util','util/template/tpl','util/dispatcher/regularModule'], function(_k, _u, _t, _m){
+                     *     // code ...
+                     * });
+                     * out:
+                     * import { klass as _k, util as _u, utilTemplateTpl as _t, utilRegularModule as _m } from "nejm";
+                     */
                     if (nejModule.length) {
                         const specifiers = nejModule.map(({ name, nejmName }) => {
                             return t.importSpecifier(t.Identifier(name), t.Identifier(nejmName))
@@ -24,6 +35,19 @@ export default function ({ types: t }) {
                         IMPORT_LIST.unshift(t.ImportDeclaration(specifiers, t.StringLiteral('nejm')));
                     }
 
+                    /**
+                     * 处理文本依赖
+                     * 
+                     * @example
+                     * in:
+                     * defint(['regular!./tpl.html', 'text!./style.css', 'json!./data.json'], function(_tpl, _css, _data) {
+                     *      // code ...
+                     * });
+                     * out:
+                     * import * as _tpl from "./tpl.html";
+                     * import * as _css from "./style.css";
+                     * import * as _data from "./data.json";
+                     */
                     if (textModule.length) {
                         textModule.forEach(({ source, name }) => {
                             const specifiers = [t.ImportNamespaceSpecifier(t.Identifier(name))];
@@ -43,6 +67,8 @@ export default function ({ types: t }) {
                         });
                     }
 
+                    const { directives } = path.node;
+
                     // 处理 return
                     let lastFnbody = FN_BODY[FN_BODY.length - 1];
                     if (t.isReturnStatement(lastFnbody)) {
@@ -58,6 +84,8 @@ export default function ({ types: t }) {
                             FN_BODY
                         })
                     );
+
+                    path.pushContainer("directives", directives);
                 }
             }
         }
