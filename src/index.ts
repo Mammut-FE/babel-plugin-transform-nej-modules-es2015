@@ -1,62 +1,61 @@
-import template from 'babel-template';
+import template from '@babel/template';
+import fetchNEJdependences from 'babel-helper-nej-transforms';
 
-const buildCommonjs = template(`
+const buildWrapper = template(`
     IMPORT_LIST
     FN_BODY
-`)
+`);
 
 export default function ({ types: t }) {
     return {
         visitor: {
             Program: {
                 exit: (path) => {
-                    let deps;
-                    let alias;
-                    let fnBody: any[];
+                    const {
+                        custormModule, textModule, nejModule, fnBody: FN_BODY
+                    } = fetchNEJdependences(path);
 
-                    path.traverse({
-                        CallExpression: (_path) => {
-                            const { node } = _path;
+                    const IMPORT_LIST = [];
 
-                            if (node.callee.name === 'define') {
-                                deps = node.arguments[0].elements.map(dep => {
-                                    return dep.value;
-                                });
-
-                                if (t.isFunctionExpression(node.arguments[1])) {
-                                    fnBody = node.arguments[1].body.body;
-
-                                    alias = node.arguments[1].params.map(param => {
-                                        return param.name;
-                                    });
-                                }
-                            }
-                        }
-                    });
-
-                    let lastFnbody = fnBody[fnBody.length - 1];
-
-                    if (t.isReturnStatement(lastFnbody)) {
-                        fnBody[fnBody.length - 1] = t.exportDefaultDeclaration(lastFnbody.argument);
+                    if (nejModule.length) {
+                        const specifiers = nejModule.map(({ name, nejmName }) => {
+                            return t.importSpecifier(t.Identifier(name), t.Identifier(nejmName))
+                        })
+                        IMPORT_LIST.unshift(t.ImportDeclaration(specifiers, t.StringLiteral('nejm')));
                     }
 
-                    const IMPORT_LIST = deps.map((dep, i) => {
-                        const specifiers = [];
-                        if (alias[i]) {
-                            specifiers.push(t.ImportDefaultSpecifier(t.Identifier(alias[i])));
-                        }
-                        return t.ImportDeclaration(specifiers, t.StringLiteral(dep))
-                    });
+                    if (textModule.length) {
+                        textModule.forEach(({ source, name }) => {
+                            const specifiers = [t.ImportNamespaceSpecifier(t.Identifier(name))];
+                            IMPORT_LIST.push(t.ImportDeclaration(specifiers, t.StringLiteral(source)));
+                        });
+                    }
 
-                    const { directives } = path.node;
+                    if (custormModule.length) {
+                        custormModule.forEach(({ source, name }) => {
+                            const specifiers = [];
+
+                            if (name) {
+                                specifiers.push(t.ImportDefaultSpecifier(t.Identifier(name)));
+                            }
+
+                            IMPORT_LIST.push(t.ImportDeclaration(specifiers, t.StringLiteral(source)));
+                        });
+                    }
+
+                    // 处理 return
+                    let lastFnbody = FN_BODY[FN_BODY.length - 1];
+                    if (t.isReturnStatement(lastFnbody)) {
+                        FN_BODY[FN_BODY.length - 1] = t.exportDefaultDeclaration(lastFnbody.argument);
+                    }
 
                     path.node.directives = [];
                     path.node.body = [];
 
                     path.pushContainer("body",
-                        buildCommonjs({
+                        buildWrapper({
                             IMPORT_LIST,
-                            FN_BODY: fnBody
+                            FN_BODY
                         })
                     );
                 }
