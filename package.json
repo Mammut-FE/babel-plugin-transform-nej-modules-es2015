@@ -1,12 +1,14 @@
 {
     "name": "babel-plugin-transform-nej-modules-es2015",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "转化 nej 代码至 commonjs",
     "main": "lib/index.js",
     "typings": "lib/index.d.ts",
     "types": "lib/index.d.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc -p src",
+        "clean": "rm -rf lib"
     },
     "repository": {
         "type": "git",
