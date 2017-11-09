@@ -6,11 +6,22 @@ const buildWrapper = template(`
     FN_BODY
 `);
 
+const genAliasRe = (alias: { [key: string]: string }) => {
+    const excape = /\//g;
+    const reStr = [];
+
+    for (const key in alias) {
+        reStr.push(`^${key.replace(excape, '\/')}`);
+    }
+
+    return new RegExp(reStr.join('|'));
+};
+
 export default function ({ types: t }) {
     return {
         visitor: {
             Program: {
-                exit: (path) => {
+                exit: (path, { alias }) => {
                     const {
                         custormModule, textModule, nejModule, fnBody: FN_BODY
                     } = fetchNEJdependences(path);
