@@ -1,5 +1,6 @@
-import template from '@babel/template';
-import fetchNEJdependences from 'babel-helper-nej-transforms';
+import * as template from 'babel-template';
+import { fetchNejDependence } from 'babel-helper-nej-transforms';
+import { ReturnStatement } from '../../babel-helper-nej-transforms/node_modules/@types/babel-types';
 
 const buildWrapper = template(`
     IMPORT_LIST
@@ -13,7 +14,7 @@ export default function ({ types: t }) {
                 exit: (path, { opts }) => {
                     const {
                         custormModule, textModule, nejModule, fnBody: FN_BODY
-                    } = fetchNEJdependences(path, opts);
+                    } = fetchNejDependence(path, opts);
 
                     const IMPORT_LIST = [];
 
@@ -72,7 +73,7 @@ export default function ({ types: t }) {
                     // 处理 return
                     let lastFnbody = FN_BODY[FN_BODY.length - 1];
                     if (t.isReturnStatement(lastFnbody)) {
-                        FN_BODY[FN_BODY.length - 1] = t.exportDefaultDeclaration(lastFnbody.argument);
+                        FN_BODY[FN_BODY.length - 1] = t.exportDefaultDeclaration((lastFnbody as ReturnStatement).argument);
                     }
 
                     path.node.directives = [];
