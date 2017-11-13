@@ -1,6 +1,6 @@
 {
     "name": "babel-plugin-transform-nej-modules-es2015",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "转化 nej 代码至 commonjs",
     "main": "lib/index.js",
     "typings": "lib/index.d.ts",
@@ -26,7 +26,7 @@
     },
     "homepage": "https://github.com/lleohao/babel-plugin-transform-nej-modules-es2015#readme",
     "dependencies": {
-        "babel-helper-nej-transforms": "file:../babel-helper-nej-transforms",
+        "babel-helper-nej-transforms": "^1.1.0",
         "babel-template": "^6.26.0"
     },
     "devDependencies": {
