@@ -90,7 +90,7 @@ export default function ({ types: t }) {
                         ];
 
                         nejInject.forEach(name => {
-                            NEJ_INJECT.push(t.variableDeclaration('const', [t.variableDeclarator(t.identifier(name), injects.shift())]));
+                            NEJ_INJECT.push(t.variableDeclaration('var', [t.variableDeclarator(t.identifier(name), injects.shift())]));
                         });
                     }
 
