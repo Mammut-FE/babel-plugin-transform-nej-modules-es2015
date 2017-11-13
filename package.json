@@ -26,7 +26,7 @@
     },
     "homepage": "https://github.com/lleohao/babel-plugin-transform-nej-modules-es2015#readme",
     "dependencies": {
-        "babel-helper-nej-transforms": "^1.0.0",
+        "babel-helper-nej-transforms": "^1.0.1",
         "babel-template": "^6.26.0"
     },
     "devDependencies": {
