@@ -12,7 +12,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/lleohao/babel-plugin-transform-nej-modules-es2015%20.git"
+        "url": "git+https://github.com/Mammut-FE/babel-plugin-transform-nej-modules-es2015.git"
     },
     "keywords": [
         "nej",
@@ -22,9 +22,9 @@
     "author": "lleohao <lleohao@hotmail.com>",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/lleohao/babel-plugin-transform-nej-modules-es2015/issues"
+        "url": "https://github.com/Mammut-FE/babel-plugin-transform-nej-modules-es2015/issues"
     },
-    "homepage": "https://github.com/lleohao/babel-plugin-transform-nej-modules-es2015#readme",
+    "homepage": "https://github.com/Mammut-FE/babel-plugin-transform-nej-modules-es2015#readme",
     "dependencies": {
         "babel-helper-nej-transforms": "^1.1.0",
         "babel-template": "^6.26.0"
