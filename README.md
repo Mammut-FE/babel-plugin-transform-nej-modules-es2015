@@ -260,3 +260,5 @@ npm i babel-plugin-transform-nej-modules-es2015 --save-dev
 
 
 觉得这个插件不错的话请给个:star:
+
+同时还有[babel-plugin-transform-es2015-modules-nejm](https://github.com/Mammut-FE/babel-plugin-transform-es2015-modules-nejm)插件将代码转换成NEJ
