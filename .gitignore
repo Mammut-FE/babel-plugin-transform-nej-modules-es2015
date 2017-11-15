@@ -2,6 +2,6 @@
 .vscode
 
 node_modules
-example
 
 lib
+example/*.out.js
