@@ -18,7 +18,7 @@ npm i babel-plugin-transform-nej-modules-es2015 --save-dev
 
    ```json
    {
-     plugins: ["transform-nej-modules-es2015"]
+     "plugins": ["transform-nej-modules-es2015"]
    }
    ```
 
@@ -230,7 +230,6 @@ npm i babel-plugin-transform-nej-modules-es2015 --save-dev
    export defalut _p;
    ```
 
-   ​
 
 ## 示例代码
 
