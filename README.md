@@ -6,7 +6,7 @@
 
 ## 安装
 
-```Node
+```
 npm i babel-plugin-transform-nej-modules-es2015 --save-dev
 ```
 
