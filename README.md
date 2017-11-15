@@ -18,7 +18,7 @@ npm i babel-plugin-transform-nej-modules-es2015 --save-dev
 
    ```json
    {
-     plugins: ['transform-nej-modules-es2015']
+     plugins: ["transform-nej-modules-es2015"]
    }
    ```
 
