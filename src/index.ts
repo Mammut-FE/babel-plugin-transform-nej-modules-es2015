@@ -1,6 +1,6 @@
 import * as template from 'babel-template';
 import { fetchNejDependence } from 'babel-helper-nej-transforms';
-import { ReturnStatement } from '../../babel-helper-nej-transforms/node_modules/@types/babel-types';
+import { ReturnStatement } from 'babel-types';
 
 const buildWrapper = template(`
     IMPORT_LIST
@@ -24,9 +24,9 @@ export default function ({ types: t }) {
 
                     /**
                      * 处理 nej 依赖, 转换成依赖 nejm https://github.com/lleohao/nejm
-                     * 
+                     *
                      * @example
-                     * in: 
+                     * in:
                      * define(['base/klass','base/util','util/template/tpl','util/dispatcher/regularModule'], function(_k, _u, _t, _m){
                      *     // code ...
                      * });
@@ -45,7 +45,7 @@ export default function ({ types: t }) {
 
                     /**
                      * 处理文本依赖
-                     * 
+                     *
                      * @example
                      * in:
                      * defint(['regular!./tpl.html', 'text!./style.css', 'json!./data.json'], function(_tpl, _css, _data) {
