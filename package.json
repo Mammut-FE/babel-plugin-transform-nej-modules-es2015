@@ -26,19 +26,13 @@
     },
     "homepage": "https://github.com/Mammut-FE/babel-plugin-transform-nej-modules-es2015#readme",
     "dependencies": {
-        "babel-helper-nej-transforms": "^1.1.0",
-        "babel-template": "^6.26.0"
+        "@types/babel-types": "^7.0.7",
+        "@babel/core": "^7.5.4",
+        "@babel/template": "^7.4.4",
+        "babel-helper-nej-transforms": "^1.1.2"
     },
     "devDependencies": {
-        "@types/babel-types": "^7.0.1",
-        "babel-core": "^6.26.0",
-        "cz-conventional-changelog": "^2.1.0",
-        "typescript": "^2.6.1"
-    },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
+        "typescript": "^3.5.3"
     },
     "directories": {
         "example": "example",
