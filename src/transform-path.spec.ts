@@ -1,4 +1,4 @@
-import {transformPath} from './transform-path';
+import { transformPath } from './transform-path';
 
 describe('transformPath', function () {
     it('transformPath is function', () => {
@@ -23,6 +23,12 @@ describe('transformPath', function () {
     it('相对路径直接返回', () => {
         expect(transformPath('', '', './util.js')).toEqual('./util');
         expect(transformPath('', '', './util.html')).toEqual('./util.html');
+    });
+
+    it('处理 nej 内部module', () => {
+        expect(transformPath('' , '', 'base/util.js')).toEqual('nejm/base/util');
+        expect(transformPath('' , '', 'base/element.js')).toEqual('nejm/base/element');
+        expect(transformPath('' , '', 'util/ajax/xhr.js')).toEqual('nejm/util/ajax/xhr');
     });
 
     it('alias 语法的路径, 返回相对于 root 路径', () => {
