@@ -26,9 +26,9 @@
     },
     "homepage": "https://github.com/Mammut-FE/babel-plugin-transform-nej-modules-es2015#readme",
     "dependencies": {
-        "@types/babel-types": "^7.0.7",
         "@babel/core": "^7.5.4",
         "@babel/template": "^7.4.4",
+        "@babel/types": "^7.5.0",
         "babel-helper-nej-transforms": "^1.1.2"
     },
     "devDependencies": {

@@ -1,6 +1,6 @@
-import * as template from 'babel-template';
+import * as template from '@babel/template';
+import * as types from '@babel/types';
 import { fetchNejDependence } from 'babel-helper-nej-transforms';
-import { ReturnStatement } from 'babel-types';
 
 const buildWrapper = template(`
     IMPORT_LIST
@@ -10,11 +10,11 @@ const buildWrapper = template(`
     FN_BODY
 `);
 
-export default function ({ types: t }) {
+export default function () {
     return {
         visitor: {
             Program: {
-                exit: (path, { opts }) => {
+                exit: (path, {opts}) => {
                     const {
                         custormModule, textModule, nejModule, nejInject, fnBody: FN_BODY
                     } = fetchNejDependence(path, opts);
@@ -34,13 +34,13 @@ export default function ({ types: t }) {
                      * import { klass as _k, util as _u, utilTemplateTpl as _t, utilRegularModule as _m } from "nejm";
                      */
                     if (nejModule.length) {
-                        const specifiers = nejModule.map(({ name, nejmName, source }) => {
+                        const specifiers = nejModule.map(({name, nejmName, source}) => {
                             if (!name) {
                                 throw path.buildCodeFrameError(`${source} 被引入, 但为被使用!`);
                             }
-                            return t.importSpecifier(t.Identifier(name), t.Identifier(nejmName))
-                        })
-                        IMPORT_LIST.unshift(t.ImportDeclaration(specifiers, t.StringLiteral('nejm')));
+                            return types.importSpecifier(types.identifier(name), types.identifier(nejmName));
+                        });
+                        IMPORT_LIST.unshift(types.importDeclaration(specifiers, types.stringLiteral('nejm')));
                     }
 
                     /**
@@ -57,24 +57,24 @@ export default function ({ types: t }) {
                      * import * as _data from "./data.json";
                      */
                     if (textModule.length) {
-                        textModule.forEach(({ source, name }) => {
+                        textModule.forEach(({source, name}) => {
                             if (!name) {
                                 throw path.buildCodeFrameError(`${source} 被引入, 但为被使用!`);
                             }
-                            const specifiers = [t.ImportNamespaceSpecifier(t.Identifier(name))];
-                            IMPORT_LIST.push(t.ImportDeclaration(specifiers, t.StringLiteral(source)));
+                            const specifiers = [types.importNamespaceSpecifier(types.identifier(name))];
+                            IMPORT_LIST.push(types.importDeclaration(specifiers, types.stringLiteral(source)));
                         });
                     }
 
                     if (custormModule.length) {
-                        custormModule.forEach(({ source, name }) => {
+                        custormModule.forEach(({source, name}) => {
                             const specifiers = [];
 
                             if (name) {
-                                specifiers.push(t.ImportDefaultSpecifier(t.Identifier(name)));
+                                specifiers.push(types.importDefaultSpecifier(types.identifier(name)));
                             }
 
-                            IMPORT_LIST.push(t.ImportDeclaration(specifiers, t.StringLiteral(source)));
+                            IMPORT_LIST.push(types.importDeclaration(specifiers, types.stringLiteral(source)));
                         });
                     }
 
@@ -83,31 +83,31 @@ export default function ({ types: t }) {
                             throw path.buildCodeFrameError(`NEJ 的注入变量超过了4个!`);
                         }
                         const injects = [
-                            t.objectExpression([]),
-                            t.objectExpression([]),
-                            t.functionExpression(null, [], t.blockStatement([t.returnStatement((t.booleanLiteral(false)))])),
-                            t.arrayExpression([])
+                            types.objectExpression([]),
+                            types.objectExpression([]),
+                            types.functionExpression(null, [], types.blockStatement([types.returnStatement((types.booleanLiteral(false)))])),
+                            types.arrayExpression([])
                         ];
 
-                        nejInject.forEach(name => {
-                            NEJ_INJECT.push(t.variableDeclaration('var', [t.variableDeclarator(t.identifier(name), injects.shift())]));
-                        });
+                        // nejInject.forEach(name => {
+                        //     nejInject.push(types.variableDeclaration('var', [types.variableDeclarator(types.identifier(name), injects.shift())]));
+                        // });
                     }
 
-                    const { directives } = path.node;
+                    const {directives} = path.node;
 
                     // 处理 return
                     let lastFnbody = FN_BODY[FN_BODY.length - 1];
-                    if (t.isReturnStatement(lastFnbody)) {
-                        FN_BODY[FN_BODY.length - 1] = t.ExportDefaultDeclaration((lastFnbody as ReturnStatement).argument);
+                    if (types.isReturnStatement(lastFnbody)) {
+                        FN_BODY[FN_BODY.length - 1] = types.exportDefaultDeclaration(lastFnbody.argument);
                     } else if (nejInject.length) { // 没有导出时, 并且通过nej注入了 _p, 则默认抛出 _p
-                        FN_BODY.push(t.ExportDefaultDeclaration(t.Identifier(nejInject[0])));
+                        FN_BODY.push(types.exportDefaultDeclaration(types.identifier(nejInject[0])));
                     }
 
                     path.node.directives = [];
                     path.node.body = [];
 
-                    path.pushContainer("body",
+                    path.pushContainer('body',
                         buildWrapper({
                             IMPORT_LIST,
                             NEJ_INJECT,
@@ -115,9 +115,9 @@ export default function ({ types: t }) {
                         })
                     );
 
-                    path.pushContainer("directives", directives);
+                    path.pushContainer('directives', directives);
                 }
             }
         }
-    }
+    };
 };
