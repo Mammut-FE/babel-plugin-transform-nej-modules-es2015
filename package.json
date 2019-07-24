@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-nej-modules-es2015",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "转化 nej 代码至 commonjs",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
