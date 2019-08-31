@@ -77,7 +77,27 @@ npm i babel-plugin-transform-nej-modules-es2015 --save-dev
 
 3. 自定义模块
 
-   TODO: 添加讲解
+   ```javascript
+   // NEJ code
+   define([
+       './helper.js'
+   ], function (_helper) {
+     return {
+      proxy: function() {
+         return _helper.proxy()
+      }
+     }
+   })
+
+   // ES6 code
+   import _helper from './helper.js';
+   
+   export default {
+      proxy: function() {
+         return _helper.proxy()
+      }
+   }
+   ```
 
 4. [NEJ注入变量](https://github.com/genify/nej/blob/master/doc/DEPENDENCY.md#define)
 
